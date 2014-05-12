@@ -39,13 +39,17 @@ import dns.rdtypes.IN.SRV
 
 # ---- Exceptions ----
 
-class ZoneError(Exception):
+class EasyZoneException(Exception):
+    ''' Exception which all eazy zone exceptions derive from '''
+    pass
+
+class ZoneError(EasyZoneException):
     '''An error from easyzone.Zone'''
 
-class NameError(Exception):
+class ZoneNameError(EasyZoneException):
     '''An error from easyzone.Name'''
 
-class RecordsError(Exception):
+class RecordsError(EasyZoneException):
     '''An error from easyzone.Records'''
 
 
@@ -206,7 +210,7 @@ class Name(object):
     def records(self, rectype, create=False, ttl=None):
         typeval = dns.rdatatype._by_text.get(rectype, None)
         if typeval is None:
-            raise NameError("Invalid type: %s" %rectype)
+            raise ZoneNameError("Invalid type: %s" %rectype)
 
         r = self._node.get_rdataset(dns.rdataclass.IN, typeval, create=create)
 
@@ -229,7 +233,7 @@ class Name(object):
         if exclude:
             exclude_type = dns.rdatatype._by_text.get(exclude, None)
             if exclude_type is None:
-                raise NameError("Invalid exclude: %s" % exclude)
+                raise ZoneNameError("Invalid exclude: %s" % exclude)
 
             for r in self._node.rdatasets:
                 if r.rdtype != exclude_type:
@@ -237,7 +241,7 @@ class Name(object):
         elif include:
             include_type = dns.rdatatype._by_text.get(include, None)
             if include_type is None:
-                raise NameError("Invalid include: %s" % include)
+                raise ZoneNameError("Invalid include: %s" % include)
 
             for r in self._node.rdatasets:
                 if r.rdtype == include_type:
