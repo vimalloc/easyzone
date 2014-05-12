@@ -1,3 +1,11 @@
+Fork of easyzone from https://bitbucket.org/chrismiles/easyzone.
+
+Includes AAAAA/SRV/PTR records from provnet here:
+https://bitbucket.org/chrismiles/easyzone/pull-request/1/add-include-option-to-clear_all_records/diff
+
+Also fixes up Exception so they derive from an EasyZone Exception base class,
+and don't overwtire NameError
+
 easyzone
 ========
 
