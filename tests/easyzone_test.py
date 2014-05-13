@@ -11,9 +11,10 @@ import os
 import tempfile
 import types
 import unittest
+import sys
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from easyzone.easyzone import Name, SOA, Zone, RecordsError, ZoneError, zone_from_file
-
 
 
 class BasicZoneTest(unittest.TestCase):
@@ -388,12 +389,6 @@ class ZoneModifySaveTest(unittest.TestCase):
         z = Zone('example.com.')
         z.load_from_file(saved_filename)
         self.failUnless(z.root.soa.serial >= self.zone.root.soa.serial)
-
-
-
-
-
-
 
 if __name__ == '__main__':
     unittest.main()
