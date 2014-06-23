@@ -156,6 +156,12 @@ class Records(object):
         self._rdataset.add(rd)
 
     def delete(self, item):
+        # If a TXT record, strip off '"' if present. Dns module will add this
+        # automatically, and it breaks if we have it here.
+        if self.type == 'TXT':
+            if item.startswith('"') and item.endswith('"'):
+                item = item[1:-1]
+
         rd = _new_rdata(self.type, item)
         try:
             self._rdataset.remove(rd)
