@@ -18,6 +18,7 @@ __version__ = '1.2.2'
 # - Python Modules -
 from time import localtime, strftime, time
 import types
+import codecs
 
 # - dnspython Modules - http://www.dnspython.org/
 try:
@@ -156,9 +157,14 @@ class Records(object):
         self._rdataset.add(rd)
 
     def delete(self, item):
-        # If a TXT record, strip off '"' if present. Dns module will add this
-        # automatically, and it breaks if we have it here.
         if self.type == 'TXT':
+            # creating a _new_rdata will re-esacpe escaped characters,
+            # so we have to 'unescape' them here (so that \\n doesn't become
+            # \\\\n).
+            item = codecs.escape_decode(item)[0]
+
+            # If a TXT record, strip off '"' if present. Dns module will add this
+            # automatically, and it breaks if we have it here.
             if item.startswith('"') and item.endswith('"'):
                 item = item[1:-1]
 
